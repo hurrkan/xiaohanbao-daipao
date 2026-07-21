@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="小汉堡代跑——校园体适能预约服务" />
+    <title>小汉堡代跑 · 校园体适能预约</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="#home" aria-label="小汉堡代跑首页">
+          <span class="brand-mark"><img src="assets/burger.jpg" alt="小汉堡头像" /></span>
+          <span><strong>小汉堡代跑</strong><small>校园体适能预约</small></span>
+        </a>
+        <nav class="nav-links" aria-label="主导航">
+          <a href="#services">服务项目</a>
+          <a href="#schools">支持高校</a>
+          <a href="#order">立即下单</a>
+          <a href="#faq">常见问题</a>
+        </nav>
+        <a class="customer-link" href="weixin://dl/chat?ATSN112266">联系客服 <span>↗</span></a>
+      </header>
+
+      <main id="home">
+        <section class="hero section-wrap">
+          <div class="hero-copy">
+            <p class="eyebrow"><span></span> 让每一次体测预约，都更轻松</p>
+            <h1>认真生活，<br /><em>轻松跑起来。</em></h1>
+            <p class="hero-text">覆盖指定高校的校园跑预约服务。选择学校、项目与性别，提交信息后即可快速安排。</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#order">开始预约 <span>→</span></a>
+              <a class="button button-quiet" href="#services">了解服务 <span>↓</span></a>
+            </div>
+            <div class="hero-note"><span class="status-dot"></span> 当前支持 4 所高校预约</div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="blob blob-yellow"></div><div class="blob blob-green"></div>
+            <div class="art-card"><img src="assets/burger.jpg" alt="" /><span class="spark spark-one">✦</span><span class="spark spark-two">✧</span></div>
+            <div class="float-tag tag-time"><strong>跑步安排</strong><small>贴心 · 高效 · 省心</small></div>
+            <div class="float-tag tag-check">✓ 已开放预约</div>
+          </div>
+        </section>
+
+        <section class="stats section-wrap" aria-label="服务数据">
+          <div><strong>04</strong><span>支持高校</span></div><div><strong>02</strong><span>跑步项目</span></div><div><strong>60<span class="unit">起</span></strong><span>女生阳光跑</span></div><div><strong>70<span class="unit">起</span></strong><span>男生阳光跑</span></div>
+        </section>
+
+        <section id="services" class="content-section section-wrap">
+          <div class="section-heading"><div><p class="eyebrow"><span></span> 我们提供什么</p><h2>把复杂的流程，<br />变成简单的一步。</h2></div><p class="section-intro">清晰的分类与价格，让你下单前就能了解全部安排。</p></div>
+          <div class="service-grid">
+            <article class="service-card service-featured"><div class="card-icon sun">☀</div><div><span class="card-kicker">POPULAR · 01</span><h3>阳光跑</h3><p>适用于阳光长跑项目，按性别计价，提前预约更安心。</p><div class="price-line"><b>女生 ¥60</b><b>男生 ¥70</b></div></div><span class="card-arrow">↗</span></article>
+            <article class="service-card"><div class="card-icon morning">☼</div><div><span class="card-kicker">DAILY · 02</span><h3>早操跑</h3><p>早操跑比阳光跑优惠 ¥10，轻松完成日常跑步安排。</p><div class="price-line"><b>女生 ¥50</b><b>男生 ¥60</b></div></div><span class="card-arrow">↗</span></article>
+          </div>
+        </section>
+
+        <section id="schools" class="school-band"><div class="section-wrap school-content"><div><p class="eyebrow eyebrow-light"><span></span> Supported campuses</p><h2>只为指定高校服务</h2></div><div class="school-list"><span>成都大学</span><span>陕西师范大学</span><span>湖南工商大学</span><span>吉首大学</span></div></div></section>
+
+        <section id="order" class="order-section section-wrap">
+          <div class="section-heading"><div><p class="eyebrow"><span></span> Quick booking</p><h2>现在就开始预约</h2></div><p class="section-intro">填写预约信息后，客服会通过微信与你确认安排。</p></div>
+          <form class="order-card" id="booking-form">
+            <div class="form-top"><div><span class="step-label">STEP 01</span><h3>选择你的预约项目</h3></div><div class="total-box"><small>预计费用</small><strong id="total-price">¥60</strong></div></div>
+            <div class="form-grid">
+              <label>所在高校<select id="school" required><option value="成都大学">成都大学</option><option value="陕西师范大学">陕西师范大学</option><option value="湖南工商大学">湖南工商大学</option><option value="吉首大学">吉首大学</option></select></label>
+              <label>跑步项目<select id="run-type" required><option value="sunshine">阳光跑</option><option value="morning">早操跑</option></select></label>
+              <fieldset><legend>性别</legend><div class="choice-row"><label class="choice"><input type="radio" name="gender" value="female" checked /><span>女生</span></label><label class="choice"><input type="radio" name="gender" value="male" /><span>男生</span></label></div></fieldset>
+              <label>预约日期<input id="date" type="date" required /></label>
+              <label>平台账号<input id="account" type="text" placeholder="请输入平台账号" required /></label>
+              <label>平台密码<input id="password" type="password" placeholder="仅用于本次安排，不会保存" required /></label>
+            </div>
+            <div class="privacy-note">ⓘ 为保护账号安全，请勿填写支付密码。演示版不会将信息发送到服务器；正式上线前请接入安全的后端与加密存储。</div>
+            <button class="button button-primary submit-button" type="submit">提交预约 <span>→</span></button>
+            <p class="form-result" id="form-result" role="status"></p>
+          </form>
+        </section>
+
+        <section id="faq" class="faq-section section-wrap"><div class="section-heading"><div><p class="eyebrow"><span></span> Need to know</p><h2>下单前，先了解这些</h2></div></div><div class="faq-list"><details open><summary>提交预约后，什么时候会联系我？<span>＋</span></summary><p>提交后请添加客服微信 <strong>ATSN112266</strong>，我们会尽快与你确认学校、项目和跑步安排。</p></details><details><summary>价格是怎么计算的？<span>＋</span></summary><p>阳光跑女生 ¥60、男生 ¥70；早操跑在对应性别价格基础上优惠 ¥10。</p></details><details><summary>支持哪些学校？<span>＋</span></summary><p>目前支持成都大学、陕西师范大学、湖南工商大学、吉首大学。</p></details></div></section>
+      </main>
+      <footer class="footer section-wrap"><a class="brand" href="#home"><span class="brand-mark"><img src="assets/burger.jpg" alt="小汉堡头像" /></span><span><strong>小汉堡代跑</strong><small>让校园跑安排更简单</small></span></a><div>客服微信：<b>ATSN112266</b><br /><small>© 2026 小汉堡代跑 · 校园体适能预约</small></div></footer>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
