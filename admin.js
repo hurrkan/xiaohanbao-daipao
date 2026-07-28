@@ -109,7 +109,7 @@ async function renderOrders() {
     var decryptedPwd = o.password_encrypted ? await decrypt(o.password_encrypted) : "";
     rows.push(
       "<tr>" +
-      "<td>" + esc(o.time) + "</td>" +
+      "<td>" + esc(o.orderNum || "") + "</td><td>" + esc(o.time) + "</td>" +
       "<td>" + esc(o.school) + "</td>" +
       "<td>" + esc(o.runType) + "</td>" +
       "<td>" + esc(o.gender) + "</td>" +
