@@ -1,0 +1,87 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>订单管理 · 小汉堡代跑</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <!-- Login Wall -->
+    <div class="login-wall" id="login-wall">
+      <div class="login-card">
+        <div class="login-icon">🔐</div>
+        <h2>小汉堡 · 订单管理</h2>
+        <p>请输入管理密码以查看订单</p>
+        <form id="login-form">
+          <input id="login-pwd" type="password" placeholder="管理密码" autofocus required />
+          <button type="submit">登录</button>
+        </form>
+        <p class="login-error" id="login-error"></p>
+      </div>
+    </div>
+
+    <!-- Admin Panel (hidden until login) -->
+    <div class="admin-panel" id="admin-panel" style="display:none">
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <a href="index.html" class="back-link">← 返回首页</a>
+          <h1>订单管理</h1>
+          <span class="order-count" id="order-count">0 条订单</span>
+        </div>
+        <div class="topbar-right">
+          <button class="btn-quiet" id="btn-change-pwd">修改密码</button>
+          <button class="btn-quiet" id="btn-logout">退出登录</button>
+        </div>
+      </header>
+
+      <main class="admin-main">
+        <div class="empty-state" id="empty-state">
+          <p>暂无订单</p>
+          <small>用户通过首页提交预约后，订单会出现在这里</small>
+        </div>
+        <div class="table-wrap" id="table-wrap" style="display:none">
+          <table>
+            <thead>
+              <tr>
+                <th>提交时间</th>
+                <th>学校</th>
+                <th>项目</th>
+                <th>性别</th>
+                <th>人数</th>
+                <th>金额</th>
+                <th>日期</th>
+                <th>账号</th>
+                <th>密码</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="orders-tbody"></tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal-overlay" id="pwd-modal" style="display:none">
+      <div class="modal-card">
+        <h3>修改管理密码</h3>
+        <form id="pwd-form">
+          <label>当前密码<input id="pwd-old" type="password" required /></label>
+          <label>新密码<input id="pwd-new" type="password" required minlength="4" /></label>
+          <label>确认新密码<input id="pwd-confirm" type="password" required /></label>
+          <div class="modal-actions">
+            <button type="button" class="btn-quiet" id="btn-modal-cancel">取消</button>
+            <button type="submit">确认修改</button>
+          </div>
+        </form>
+        <p class="login-error" id="pwd-error"></p>
+      </div>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>
