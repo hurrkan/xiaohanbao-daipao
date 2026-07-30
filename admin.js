@@ -73,8 +73,7 @@ async function renderOrders() {
       if (!error && data) {
         orders = data.map(function(o) {
           return {
-            id: o.id, time: o.time, school: o.school, gender: o.gender,
-            people: o.people, peopleLabel: o.people_label, runType: o.run_type,
+            id: o.id, time: o.time, school: o.school, maleCount: o.male_count, femaleCount: o.female_count, runType: o.run_type,
             price: o.price, date: o.date, account: o.account,
             password_encrypted: o.password_encrypted
           };
@@ -112,8 +111,8 @@ async function renderOrders() {
       "<td>" + esc(o.orderNum || "") + "</td><td>" + esc(o.time) + "</td>" +
       "<td>" + esc(o.school) + "</td>" +
       "<td>" + esc(o.runType) + "</td>" +
-      "<td>" + esc(o.gender) + "</td>" +
-      "<td>" + esc(o.peopleLabel) + "</td>" +
+      "<td>" + esc(o.maleCount || 0) + "</td>" +
+      "<td>" + esc(o.femaleCount || 0) + "</td>" +
       "<td>¥" + o.price + "</td>" +
       "<td>" + esc(o.date) + "</td>" +
       "<td>" + esc(o.account) + "</td>" +
