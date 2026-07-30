@@ -38,7 +38,7 @@ function generateOrderNumber() {
   return num;
 }
 
-function getTier(n) { return n >= 3 ? "3+" : Math.max(n, 1); }
+
 
 /* ── Supabase ── */
 var supabase = null;
@@ -71,9 +71,11 @@ function updatePrice() {
   var m = parseInt(maleInput.value, 10) || 0;
   var f = parseInt(femaleInput.value, 10) || 0;
   if (m === 0 && f === 0) { totalPrice.textContent = "¥0"; var payEl = document.querySelector("#pay-amount"); if (payEl) payEl.textContent = "¥0"; return; }
-  var mTier = getTier(m);
-  var fTier = getTier(f);
-  var total = (m * prices.male[mTier]) + (f * prices.female[fTier]);
+  var totalN = m + f;
+  var tier = totalN >= 3 ? "3+" : Math.max(totalN, 1);
+  var total = 0;
+  if (m > 0) total += m * prices.male[tier];
+  if (f > 0) total += f * prices.female[tier];
   totalPrice.textContent = "¥" + total;
   var payEl = document.querySelector("#pay-amount");
   if (payEl) payEl.textContent = "¥" + total;
@@ -96,10 +98,10 @@ form.addEventListener("submit", async function(e) {
   var account = document.querySelector("#account").value.trim();
   var plainPassword = document.querySelector("#password").value;
 
-  var mTier = getTier(m);
-  var fTier = getTier(f);
-  var mPrice = m > 0 ? prices.male[mTier] : 0;
-  var fPrice = f > 0 ? prices.female[fTier] : 0;
+  var totalN = m + f;
+  var tier = totalN >= 3 ? "3+" : Math.max(totalN, 1);
+  var mPrice = m > 0 ? prices.male[tier] : 0;
+  var fPrice = f > 0 ? prices.female[tier] : 0;
   var total = m * mPrice + f * fPrice;
 
   var parts = [];
