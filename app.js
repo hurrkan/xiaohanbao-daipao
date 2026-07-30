@@ -204,7 +204,8 @@ form.addEventListener("submit", async function(e) {
         var check = await checkPayment(orderNum);
         if (check && check.paid) {
           clearInterval(pollInterval);
-          document.querySelector("#pay-status").innerHTML = "✅ 支付成功！已自动确认。";
+          document.querySelector("#pay-status").innerHTML = "<div style=\"font-size:14px;color:#638b35;font-weight:700\">✅ 支付成功！</div><div style=\"font-size:12px;color:#6b5e52;margin-top:8px\">订单编号：<b style=\"color:#6f412e\">#' + orderNum + '</b></div><div style=\"font-size:11px;color:#c0392b;margin-top:6px\">📸 请截图保存此页面<br>添加客服微信 <b>ATSN112266</b> 备注编号确认</div>";
+
           document.querySelector("#pay-status").style.color = "#638b35";
         }
       }, 3000);
