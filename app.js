@@ -84,11 +84,8 @@ function saveLocalOrders(orders) {
 var form = document.querySelector("#booking-form");
 var totalPrice = document.querySelector("#total-price");
 var result = document.querySelector("#form-result");
-var dateInput = document.querySelector("#date");
 var maleInput = document.querySelector("#male-count");
 var femaleInput = document.querySelector("#female-count");
-
-dateInput.min = new Date().toISOString().split("T")[0];
 
 function updatePrice() {
   var m = parseInt(maleInput.value, 10) || 0;
@@ -115,10 +112,7 @@ form.addEventListener("submit", async function(e) {
   var runType = document.querySelector("#run-type").value === "morning" ? "早操跑" : "阳光跑";
   var m = parseInt(maleInput.value, 10) || 0;
   var f = parseInt(femaleInput.value, 10) || 0;
-  if (m === 0 && f === 0) { result.textContent = "请至少选择1人下单"; result.scrollIntoView({ behavior: "smooth", block: "nearest" }); return; }
-
-  var date = dateInput.value;
-  var account = document.querySelector("#account").value.trim();
+  if (m === 0 && f === 0) { result.textContent = "请至少选择1人下单"; result.scrollIntoView({ behavior: "smooth", block: "nearest" }); return; }  var account = document.querySelector("#account").value.trim();
   var plainPassword = document.querySelector("#password").value;
 
   var totalN = m + f;
@@ -146,9 +140,7 @@ form.addEventListener("submit", async function(e) {
     malePrice: mPrice,
     femalePrice: fPrice,
     runType: runType,
-    price: total,
-    date: date,
-    account: account,
+    price: total,  account: account,
     password_encrypted: passwordEncrypted
   };
 
