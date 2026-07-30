@@ -42,7 +42,7 @@ function generateOrderNumber() {
 
 /* ── Supabase ── */
 /* ── Payment Worker ── */
-var PAY_WORKER = "";  // Fill in after deploying worker
+var PAY_WORKER = "https://long-sun-6b2e.3218908655.workers.dev";  // Fill in after deploying worker
 
 async function createPayment(orderNum, amount) {
   if (!PAY_WORKER) return null;
