@@ -87,6 +87,7 @@ form.addEventListener("submit", async function(e) {
   e.preventDefault();
 
   var school = document.querySelector("#school").value;
+  var runType = document.querySelector("#run-type").value === "morning" ? "早操跑" : "阳光跑";
   var m = parseInt(maleInput.value, 10) || 0;
   var f = parseInt(femaleInput.value, 10) || 0;
   if (m === 0 && f === 0) { result.textContent = "请至少选择1人下单"; result.scrollIntoView({ behavior: "smooth", block: "nearest" }); return; }
@@ -119,7 +120,7 @@ form.addEventListener("submit", async function(e) {
     peopleLabel: peopleLabel,
     malePrice: mPrice,
     femalePrice: fPrice,
-    runType: "阳光跑",
+    runType: runType,
     price: total,
     date: date,
     account: account,
