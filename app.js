@@ -41,6 +41,29 @@ function generateOrderNumber() {
 
 
 /* ── Supabase ── */
+/* ── Payment Worker ── */
+var PAY_WORKER = "https://long-sun-6b2e.3218908655.workers.dev";  // Fill in after deploying worker
+
+async function createPayment(orderNum, amount) {
+  if (!PAY_WORKER) return null;
+  try {
+    var r = await fetch(PAY_WORKER + "/api/create-payment", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderNum: orderNum, amount: amount, subject: "小汉堡代跑 #" + orderNum })
+    });
+    return await r.json();
+  } catch (e) { return null; }
+}
+async function checkPayment(orderNum) {
+  if (!PAY_WORKER) return null;
+  try {
+    var r = await fetch(PAY_WORKER + "/api/check-payment", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderNum: orderNum })
+    });
+    return await r.json();
+  } catch (e) { return null; }
+}
 var supabase = null;
 if (SUPABASE_URL && SUPABASE_KEY) {
   import("https://esm.sh/@supabase/supabase-js@2").then(function(m) {
@@ -154,5 +177,48 @@ form.addEventListener("submit", async function(e) {
     "添加客服微信 <b>ATSN112266</b>，备注编号 <b>#" + orderNum + "</b> 确认。";
   result.scrollIntoView({ behavior: "smooth", block: "nearest" });
 
-  document.querySelector("#password").value = "";
+    document.querySelector("#password").value = "";
+
+  // Show payment section + dynamic QR
+  var paySection = document.querySelector("#pay");
+  var payContent = document.querySelector("#pay-content");
+  if (paySection && PAY_WORKER) {
+    paySection.style.display = "block";
+    payContent.innerHTML = "<p style='color:#9b8f82'>正在生成支付二维码...</p>";
+    paySection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    var payResult = await createPayment(orderNum, total);
+    if (payResult && payResult.success) {
+      var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(payResult.qr_code);
+      payContent.innerHTML =
+        "<img src='" + qrUrl + "' style='width:200px;height:200px;border-radius:12px;border:2px solid #e9dfd2' />" +
+        "<p style='font-size:11px;color:#9b8f82;margin:12px 0'>支付宝扫码支付 ¥" + total + "</p>" +
+        "<p style='font-size:11px;color:#6b5e52' id='pay-status'>⏳ 等待支付中...</p>";
+
+      // Poll for payment
+      var pollCount = 0;
+      var maxPoll = 60;  // 3 minutes
+      var pollInterval = setInterval(async function() {
+        pollCount++;
+        if (pollCount > maxPoll) { clearInterval(pollInterval); return; }
+        var check = await checkPayment(orderNum);
+        if (check && check.paid) {
+          clearInterval(pollInterval);
+          document.querySelector("#pay-status").innerHTML = "✅ 支付成功！已自动确认。";
+          document.querySelector("#pay-status").style.color = "#638b35";
+        }
+      }, 3000);
+    } else {
+      payContent.innerHTML = "<p style='color:#c0392b'>支付二维码生成失败，请使用上方静态收款码支付。</p>";
+      // Show static QR fallback
+      var fallback = payContent.querySelector("img");
+    }
+  } else if (paySection) {
+    // No worker configured - show static QR
+    paySection.style.display = "block";
+    payContent.innerHTML =
+      "<img src='alipay-qr.jpg' style='width:200px;height:200px;border-radius:12px;border:2px solid #e9dfd2' />" +
+      "<p style='font-size:11px;color:#9b8f82;margin:12px 0'>支付宝扫码支付 ¥" + total + "</p>" +
+      "<p style='font-size:11px;color:#6b5e52'>支付后请添加客服微信 ATSN112266 确认</p>";
+  }
 });
