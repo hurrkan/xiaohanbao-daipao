@@ -21,8 +21,14 @@ function getLocalOrders() { try { return JSON.parse(localStorage.getItem("xiaoha
 function saveLocalOrders(o) { localStorage.setItem("xiaohanbao_orders", JSON.stringify(o)); }
 
 async function saveServerOrder(order) {
-  try { await fetch(STORAGE_URL, { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(order) }); } catch(e) {}
+  var serverNum = null;
+  try {
+    var r = await fetch(STORAGE_URL, { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(order) });
+    if (r.ok) { var d = await r.json(); if (d.ok) serverNum = d.serverOrderNum; }
+  } catch(e) {}
+  if (serverNum) order.serverOrderNum = serverNum;
   var lo = getLocalOrders(); lo.unshift(order); saveLocalOrders(lo);
+  return serverNum || order.serverOrderNum;
 }
 async function getServerOrders() {
   try { var r = await fetch(STORAGE_URL); if (r.ok) return await r.json(); } catch(e) {}
@@ -89,12 +95,12 @@ form.addEventListener("submit", async function(e) {
   var mPrice = m > 0 ? prices.male[tier] : 0, fPrice = f > 0 ? prices.female[tier] : 0;
   var total = m * mPrice + f * fPrice, parts = [];
   if (m > 0) parts.push(m + "男"); if (f > 0) parts.push(f + "女");
-  var peopleLabel = parts.join(" + "), orderNum = generateOrderNumber();
-  var order = { id: Date.now(), orderNum: orderNum, time: new Date().toLocaleString("zh-CN"), school: school, maleCount: m, femaleCount: f, peopleLabel: peopleLabel, malePrice: mPrice, femalePrice: fPrice, runType: runType, price: total, persons: persons };
+  var peopleLabel = parts.join(" + "), serverOrderNum = generateOrderNumber();
+  var order = { id: Date.now(), serverOrderNum: serverOrderNum, time: new Date().toLocaleString("zh-CN"), school: school, maleCount: m, femaleCount: f, peopleLabel: peopleLabel, malePrice: mPrice, femalePrice: fPrice, runType: runType, price: total, persons: persons };
   var local = getLocalOrders(); local.unshift(order); saveLocalOrders(local);
   syncOrders(local);
   var breakdown = []; if (m > 0) breakdown.push(m + "男 × ¥" + mPrice); if (f > 0) breakdown.push(f + "女 × ¥" + fPrice);
-  result.innerHTML = "<strong style='font-size:18px;color:#6f412e'>订单提交成功！编号：#" + orderNum + "</strong><br><br>学校：" + school + " · " + runType + "<br>人数：" + peopleLabel + "<br>单价：" + breakdown.join("，") + "<br>总金额：<b>¥" + total + "</b><br><br><span style='color:#c0392b;font-size:14px'>📸 请截图保存此页面！</span><br>添加客服微信 <b>ATSN112266</b>，备注编号 <b>#" + orderNum + "</b>";
+  result.innerHTML = "<strong style='font-size:18px;color:#6f412e'>订单提交成功！编号：#" + serverOrderNum + "</strong><br><br>学校：" + school + " · " + runType + "<br>人数：" + peopleLabel + "<br>单价：" + breakdown.join("，") + "<br>总金额：<b>¥" + total + "</b><br><br><span style='color:#c0392b;font-size:14px'>📸 请截图保存此页面！</span><br>添加客服微信 <b>ATSN112266</b>，备注编号 <b>#" + serverOrderNum + "</b>";
   result.scrollIntoView({ behavior: "smooth", block: "nearest" });
   var payS = document.querySelector("#pay"), payC = document.querySelector("#pay-content");
   if (payS) { payS.style.display = "block"; payC.innerHTML = "<img src='alipay-qr.jpg' style='width:240px;height:240px;border-radius:14px;border:3px solid #e9dfd2' /><p style='font-size:14px;color:#9b8f82;margin:14px 0'>支付宝扫码支付 <b id='pay-amount' style='color:#6f412e'>¥" + total + "</b></p><p style='font-size:13px;color:#6b5e52'>支付后请添加客服微信 <b>ATSN112266</b> 确认</p>"; payS.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
