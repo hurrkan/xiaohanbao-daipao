@@ -20,26 +20,6 @@ function generateOrderNumber() {
 function getLocalOrders() { try { return JSON.parse(localStorage.getItem("xiaohanbao_orders") || "[]"); } catch(e) { return []; } }
 function saveLocalOrders(o) { localStorage.setItem("xiaohanbao_orders", JSON.stringify(o)); }
 
-async function saveServerOrder(order) {
-  var serverNum = null;
-  try {
-    var r = await fetch(STORAGE_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: JSON.stringify(order) });
-    if (r.ok) { var d = await r.json(); if (d.ok) serverNum = d.serverOrderNum; }
-  } catch(e) {}
-  if (serverNum) order.serverOrderNum = serverNum;
-  var lo = getLocalOrders(); lo.unshift(order); saveLocalOrders(lo);
-  return serverNum || order.serverOrderNum;
-}
-async function getServerOrders() {
-  try { var r = await fetch(STORAGE_URL); if (r.ok) return await r.json(); } catch(e) {}
-  return getLocalOrders();
-}
-async function deleteServerOrder(id) {
-  try { await fetch(STORAGE_URL + "?id=" + id, { method: "DELETE" }); } catch(e) {}
-  var lo = getLocalOrders().filter(function(o) { return o.id !== id; });
-  saveLocalOrders(lo);
-}
-
 async function syncOrders(orders) {
   try {
     var d = encodeURIComponent(JSON.stringify(orders[0]));

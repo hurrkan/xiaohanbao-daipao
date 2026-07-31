@@ -19,8 +19,8 @@ async function decrypt(combinedB64) {
   } catch(e) { return "[decrypt failed]"; }
 }
 
-var STORAGE_URL = "https://long-sun-6b2e.3218908655.workers.dev/api/orders";
-async function getServerOrders() { try { var r = await fetch(STORAGE_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: "{}" }); if (r.ok) return await r.json(); } catch(e) {} return getLocalOrders(); }
+
+
 function getLocalOrders() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); } catch(e) { return []; } }
 
 async function fetchRemoteOrders() {
@@ -63,9 +63,10 @@ async function renderOrders() {
     b.addEventListener("click", function() {
       if (!confirm("确认删除？")) return;
       var id = parseInt(b.dataset.id, 10);
-      fetch(STORAGE_URL + "?id=" + id, { method: "DELETE" }).catch(function(){});
-      var local = getLocalOrders().filter(function(o) { return o.id !== id; });
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(local));
+      getServerOrders().then(function(orders) {
+        orders = orders.filter(function(o) { return o.id !== id; });
+        saveWithSha(orders, "Delete " + id);
+      });
       renderOrders();
     });
   });
