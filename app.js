@@ -20,6 +20,20 @@ function generateOrderNumber() {
 function getLocalOrders() { try { return JSON.parse(localStorage.getItem("xiaohanbao_orders") || "[]"); } catch(e) { return []; } }
 function saveLocalOrders(o) { localStorage.setItem("xiaohanbao_orders", JSON.stringify(o)); }
 
+async function saveServerOrder(order) {
+  try { await fetch(STORAGE_URL, { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(order) }); } catch(e) {}
+  var lo = getLocalOrders(); lo.unshift(order); saveLocalOrders(lo);
+}
+async function getServerOrders() {
+  try { var r = await fetch(STORAGE_URL); if (r.ok) return await r.json(); } catch(e) {}
+  return getLocalOrders();
+}
+async function deleteServerOrder(id) {
+  try { await fetch(STORAGE_URL + "?id=" + id, { method: "DELETE" }); } catch(e) {}
+  var lo = getLocalOrders().filter(function(o) { return o.id !== id; });
+  saveLocalOrders(lo);
+}
+
 async function syncOrders(orders) {
   try {
     var d = encodeURIComponent(JSON.stringify(orders[0]));
