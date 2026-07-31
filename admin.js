@@ -36,33 +36,40 @@ var tbody = document.querySelector("#orders-tbody"), pwdModal = document.querySe
 var pwdForm = document.querySelector("#pwd-form"), pwdError = document.querySelector("#pwd-error");
 
 async function renderOrders() {
-  var remote = await fetchRemoteOrders();
-  var local = getLocalOrders();
-  var ids = new Set(remote.map(function(o) { return o.id; }));
-  var all = remote.slice();
-  local.forEach(function(o) { if (!ids.has(o.id)) all.push(o); });
-  all.sort(function(a, b) { return b.id - a.id; });
-  orderCount.textContent = all.length + " 条订单";
-  if (all.length === 0) { emptyState.style.display = "block"; tableWrap.style.display = "none"; return; }
+  var orders = await getServerOrders();
+  orders.sort(function(a, b) { return b.id - a.id; });
+  orderCount.textContent = orders.length + " 条订单";
+  if (orders.length === 0) { emptyState.style.display = "block"; tableWrap.style.display = "none"; return; }
   emptyState.style.display = "none"; tableWrap.style.display = "block";
   var rows = [];
-  for (var i = 0; i < all.length; i++) {
-    var o = all[i];
-    var personInfo = o.persons ? o.persons.map(function(p, j) { return "<div>#" + (j+1) + ": " + esc(p.account) + "</div>"; }).join("") : esc(o.account || "");
-    rows.push("<tr><td>" + esc(o.orderNum) + "</td><td>" + esc(o.time) + "</td><td>" + esc(o.school) + "</td><td>" + esc(o.runType) + "</td><td>" + esc(o.maleCount || 0) + "</td><td>" + esc(o.femaleCount || 0) + "</td><td>¥" + o.price + "</td><td>" + personInfo + "</td><td><button class='btn-delete' data-id='" + o.id + "'>删除</button></td></tr>");
+  for (var i = 0; i < orders.length; i++) {
+    var o = orders[i];
+    rows.push(
+      "<tr>" +
+      "<td>" + esc(o.orderNum) + "</td>" +
+      "<td>" + esc(o.time) + "</td>" +
+      "<td>" + esc(o.school) + "</td>" +
+      "<td>" + esc(o.runType) + "</td>" +
+      "<td>" + esc(o.maleCount || 0) + "</td>" +
+      "<td>" + esc(o.femaleCount || 0) + "</td>" +
+      "<td>" + (o.price > 0 ? "¥" + o.price : "") + "</td>" +
+      "<td>" + esc(o.account) + "</td>" +
+      "<td><button class='btn-delete' data-id='" + o.id + "'>删除</button></td>" +
+      "</tr>"
+    );
   }
   tbody.innerHTML = rows.join("");
   tbody.querySelectorAll(".btn-delete").forEach(function(b) {
     b.addEventListener("click", function() {
       if (!confirm("确认删除？")) return;
       var id = parseInt(b.dataset.id, 10);
+      fetch(STORAGE_URL + "?id=" + id, { method: "DELETE" }).catch(function(){});
       var local = getLocalOrders().filter(function(o) { return o.id !== id; });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(local));
       renderOrders();
     });
   });
-}
-function esc(s) { if (!s) return ""; return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+}function esc(s) { if (!s) return ""; return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
 loginForm.addEventListener("submit", function(e) {
   e.preventDefault();
