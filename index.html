@@ -69,8 +69,7 @@
               <label>跑步项目
               <label>男生人数<input id="male-count" type="number" min="0" max="10" value="0" /></label>
               <label>女生人数<input id="female-count" type="number" min="0" max="10" value="1" /></label>
-              <label>平台账号<input id="account" type="text" placeholder="请输入平台账号" required /></label>
-              <label>平台密码<input id="password" type="password" placeholder="仅用于本次安排，不会保存" required /></label>
+              <fieldset style="margin-top:16px"><legend>多人信息</legend><div id="person-fields" class="person-fields"></div></fieldset>
             </div>
             <div class="privacy-note">🔒 你的平台密码已通过 AES-256-GCM 加密存储，仅管理员可解密查看。</div>
             <button class="button button-primary submit-button" type="submit">提交预约 <span>→</span></button>
@@ -78,11 +77,13 @@
           </form>
         </section>
 
-                <section id="pay" class="order-section section-wrap" style="padding-top:0;display:none">
+                <section id="pay" class="order-section section-wrap" style="padding-top:0">
           <div class="order-card">
             <h3 style="margin:0 0 18px">💳 扫码支付</h3>
             <div id="pay-content" style="text-align:center">
-              <p style="color:#9b8f82">正在生成支付二维码...</p>
+              <img src="alipay-qr.jpg" style="width:240px;height:240px;border-radius:14px;border:3px solid #e9dfd2" />
+              <p style="font-size:14px;color:#9b8f82;margin:14px 0">支付宝扫码支付 <b id="pay-amount" style="color:#6f412e">¥70</b></p>
+              <p style="font-size:13px;color:#6b5e52">支付后请添加客服微信 <b>ATSN112266</b> 确认</p>
             </div>
           </div>
         </section><section id="faq" class="faq-section section-wrap"><div class="section-heading"><div><p class="eyebrow"><span></span> Need to know</p><h2>下单前，先了解这些</h2></div></div><div class="faq-list"><details open><summary>提交预约后，什么时候会联系我？<span>＋</span></summary><p>提交后请添加客服微信 <strong>ATSN112266</strong>，我们会尽快与你确认学校、项目和跑步安排。</p></details><details><summary>价格是怎么计算的？<span>＋</span></summary><p>阳光跑按性别和人数阶梯计费。女生：单独 ¥70 / 2人组团 ¥65 / 3人及以上 ¥60；男生：单独 ¥80 / 2人组团 ¥75 / 3人及以上 ¥70。</p></details><details><summary>支持哪些学校？<span>＋</span></summary><p>目前支持湖南工商大学和吉首大学，三个校区都可以跑。</p></details></div></section>

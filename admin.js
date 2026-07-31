@@ -105,7 +105,7 @@ async function renderOrders() {
   var rows = [];
   for (var i = 0; i < orders.length; i++) {
     var o = orders[i];
-    var decryptedPwd = o.password_encrypted ? await decrypt(o.password_encrypted) : "";
+    var personInfo = ""; if (o.persons) { personInfo = o.persons.map(function(p, i) { return "<div>#" + (i+1) + ": " + esc(p.account) + "</div>"; }).join(""); } else { personInfo = esc(o.account || ""); }
     rows.push(
       "<tr>" +
       "<td>" + esc(o.orderNum || "") + "</td><td>" + esc(o.time) + "</td>" +
@@ -116,7 +116,7 @@ async function renderOrders() {
       "<td>¥" + o.price + "</td>" +
       "<td>" + esc(o.date) + "</td>" +
       "<td>" + esc(o.account) + "</td>" +
-      "<td>" + esc(decryptedPwd) + "</td>" +
+      "<td>" + personInfo + "</td>" +
       "<td><button class=\"btn-delete\" data-id=\"" + o.id + "\">删除</button></td>" +
       "</tr>"
     );
