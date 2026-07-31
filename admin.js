@@ -20,7 +20,7 @@ async function decrypt(combinedB64) {
 }
 
 var STORAGE_URL = "https://long-sun-6b2e.3218908655.workers.dev/api/orders";
-async function getServerOrders() { try { var r = await fetch(STORAGE_URL, { method: "POST" }); if (r.ok) return await r.json(); } catch(e) {} return getLocalOrders(); }
+async function getServerOrders() { try { var r = await fetch(STORAGE_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: "{}" }); if (r.ok) return await r.json(); } catch(e) {} return getLocalOrders(); }
 function getLocalOrders() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); } catch(e) { return []; } }
 
 async function fetchRemoteOrders() {

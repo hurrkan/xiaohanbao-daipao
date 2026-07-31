@@ -23,7 +23,7 @@ function saveLocalOrders(o) { localStorage.setItem("xiaohanbao_orders", JSON.str
 async function saveServerOrder(order) {
   var serverNum = null;
   try {
-    var r = await fetch(STORAGE_URL, { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(order) });
+    var r = await fetch(STORAGE_URL, { method: "POST", headers: {"Content-Type":"text/plain"}, body: JSON.stringify(order) });
     if (r.ok) { var d = await r.json(); if (d.ok) serverNum = d.serverOrderNum; }
   } catch(e) {}
   if (serverNum) order.serverOrderNum = serverNum;
